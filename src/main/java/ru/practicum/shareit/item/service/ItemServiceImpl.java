@@ -87,26 +87,22 @@ public class ItemServiceImpl implements ItemService {
         if (!userServiceImpl.existsById(userId)) {
             throw new NotFoundException("Владелец с ID " + userId + " не найден");
         }
-        List<ItemDto> userItems = items.values().stream()
+        return items.values().stream()
                 .filter(item -> item.getOwnerId() == userId)
                 .map(itemMapper::toItemDto)
                 .collect(Collectors.toList());
-        return userItems;
     }
-    
+
     @Override
     public List<ItemDto> searchItems(String text) {
         if (text == null || text.isBlank()) {
             return List.of();
         }
-
-        List<ItemDto> foundItems = items.values().stream()
+        return items.values().stream()
                 .filter(item -> item.getAvailable() != null && item.getAvailable() &&
                         (item.getName().toLowerCase().contains(text.toLowerCase()) ||
                                 item.getDescription().toLowerCase().contains(text.toLowerCase())))
                 .map(itemMapper::toItemDto)
                 .collect(Collectors.toList());
-
-        return foundItems;
     }
 }
