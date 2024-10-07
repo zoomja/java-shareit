@@ -26,7 +26,7 @@ public class Item {
     @JoinColumn(name = "owner_id")
     @ManyToOne
     private User owner;
-    @JoinColumn(name = "request_id", nullable = true)
+    @JoinColumn(name = "request_id")
     private int requestId;
 
 }

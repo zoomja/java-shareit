@@ -42,19 +42,3 @@ public class Booking {
     @Column(name = "status")
     private Status status;
 }
-//@Data
-//@NoArgsConstructor
-//@Entity
-//@Table(name = "bookings")
-//public class Booking {
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private int id;
-//    private int itemId;
-//    private int bookerId;
-//    private LocalDateTime start;
-//    private LocalDateTime end;
-//    @Enumerated(EnumType.STRING)
-//    @Column(name = "status")
-//    private Status status;
-//}
