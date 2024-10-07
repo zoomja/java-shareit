@@ -44,7 +44,7 @@ public class BookingServiceImpl implements BookingService {
 
         Item item = itemRepository.findById(bookingDto.getItemId())
                 .orElseThrow(() -> new NotFoundException("Вещь не существует"));
-        if(!item.getAvailable()) {
+        if (!item.getAvailable()) {
             throw new ItemNotAvailableException("Вещь недоступна");
         }
 
@@ -101,8 +101,10 @@ public class BookingServiceImpl implements BookingService {
             case CURRENT -> bookingMapper.toBookingDto(bookingRepository.findCurrentActiveBookingsByBookerId(bookerId));
             case PAST -> bookingMapper.toBookingDto(bookingRepository.findPastBookingsByBookerId(bookerId));
             case FUTURE -> bookingMapper.toBookingDto(bookingRepository.findFutureBookingsByBookerId(bookerId));
-            case WAITING -> bookingMapper.toBookingDto(bookingRepository.findBookingsByBooker_IdAndStatusOrderByStartDesc(bookerId, Status.WAITING));
-            case REJECTED -> bookingMapper.toBookingDto(bookingRepository.findBookingsByBooker_IdAndStatusOrderByStartDesc(bookerId, Status.REJECTED));
+            case WAITING ->
+                    bookingMapper.toBookingDto(bookingRepository.findBookingsByBooker_IdAndStatusOrderByStartDesc(bookerId, Status.WAITING));
+            case REJECTED ->
+                    bookingMapper.toBookingDto(bookingRepository.findBookingsByBooker_IdAndStatusOrderByStartDesc(bookerId, Status.REJECTED));
         };
     }
 

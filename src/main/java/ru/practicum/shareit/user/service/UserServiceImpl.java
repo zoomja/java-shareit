@@ -60,7 +60,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto getUser(int id) {
-        User user = userRepository.findById(id).orElseThrow(()-> new NotFoundException("Пользователь не найден"));
+        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("Пользователь не найден"));
         log.info("Пользователь получен по ID: {}", id);
         return userMapper.toUserDto(user);
     }
