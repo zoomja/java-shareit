@@ -36,7 +36,7 @@ public interface BookingRepository extends JpaRepository<Booking, Integer> {
             "WHERE b.booker.id = :bookerId " +
             "AND b.item.id = :itemId " +
             "AND b.end <= CURRENT_TIMESTAMP")
-    boolean existsByBookerIdAndItemIdPast(long bookerId, long itemId);
+    boolean existsByBookerIdAndItemIdPast(int bookerId, int itemId);
 
     @Query(value = "SELECT b FROM Booking b " +
             "JOIN Item i ON i.id = b.item.id  " +
