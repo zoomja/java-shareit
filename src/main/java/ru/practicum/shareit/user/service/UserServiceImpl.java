@@ -3,24 +3,22 @@ package ru.practicum.shareit.user.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.model.User;
+import ru.practicum.shareit.user.repository.UserRepository;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private final Map<Integer, User> users = new HashMap<>();
+    private final UserRepository userRepository;
     private final UserMapper userMapper;
 
-    private int userIdCounter = 1;
 
     @Override
     public UserDto createUser(UserDto userDto) {
@@ -31,33 +29,30 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("Email уже используется: " + userDto.getEmail());
         }
         User user = userMapper.toUser(userDto);
-        user.setId(userIdCounter++);
 
-        users.put(user.getId(), user);
+        userRepository.save(user);
         log.info("Пользователь создан: {}", user);
 
         return userMapper.toUserDto(user);
     }
 
     @Override
-    public UserDto updateUser(Long id, UserDto userDto) {
-        int userId = Math.toIntExact(id);
+    public UserDto updateUser(int id, UserDto userDto) {
 
-        if (!users.containsKey(userId)) {
-            throw new IllegalArgumentException("Пользователь не найден");
+        User user = userMapper.toUser(getUser(id));
+
+        if (userDto.getEmail() != null && isEmailAlreadyUsed(userDto.getEmail(), user.getId())) {
+            throw new IllegalArgumentException("Email уже используется: " + userDto.getEmail());
         }
 
-        User user = users.get(userId);
-        user.setName(userDto.getName());
-
-        if (userDto.getEmail() != null && isEmailAlreadyUsed(userDto.getEmail(), userId)) {
-            throw new IllegalArgumentException("Email уже используется: " + userDto.getEmail());
+        if (userDto.getName() != null) {
+            user.setName(userDto.getName());
         }
 
         if (userDto.getEmail() != null) {
             user.setEmail(userDto.getEmail());
         }
-        users.put(userId, user);
+        userRepository.save(user);
         log.info("Пользователь обновлен: {}", user);
 
         return userMapper.toUserDto(user);
@@ -65,27 +60,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto getUser(int id) {
-        User user = users.get(id);
-        if (user == null) {
-            throw new IllegalArgumentException("Пользователь не найден");
-        }
+        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException("Пользователь не найден"));
         log.info("Пользователь получен по ID: {}", id);
         return userMapper.toUserDto(user);
     }
 
     @Override
     public List<UserDto> getAllUsers() {
-        List<User> userList = new ArrayList<>(users.values());
-        log.info("Получение всех пользователей, количество: {}", userList.size());
-        return userMapper.toUserDto(userList);
+        return userMapper.toUserDto(userRepository.findAll());
     }
 
     @Override
     public void deleteUser(int id) {
-        if (!users.containsKey(id)) {
-            throw new IllegalArgumentException("Пользователь не найден");
-        }
-        users.remove(id);
+        userRepository.deleteById(id);
         log.info("Пользователь удален с ID: {}", id);
     }
 
@@ -93,11 +80,7 @@ public class UserServiceImpl implements UserService {
         if (email == null) {
             return false;
         }
-        return users.values().stream()
+        return userRepository.findAll().stream()
                 .anyMatch(user -> email.equals(user.getEmail()) && user.getId() != currentUserId);
-    }
-
-    public boolean existsById(int userId) {
-        return users.containsKey(userId);
     }
 }

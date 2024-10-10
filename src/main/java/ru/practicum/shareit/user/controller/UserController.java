@@ -24,7 +24,7 @@ public class UserController {
     }
 
     @PatchMapping("/{id}")
-    public UserDto updateUser(@PathVariable("id") Long id, @RequestBody UserDto userDto) {
+    public UserDto updateUser(@PathVariable("id") int id, @RequestBody UserDto userDto) {
         log.info("Запрос на обновление пользователя с ID {}: {}", id, userDto);
         return userServiceImpl.updateUser(id, userDto);
     }
