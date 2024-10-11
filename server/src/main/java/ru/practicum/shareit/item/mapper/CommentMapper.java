@@ -17,5 +17,4 @@ public interface CommentMapper {
     Comment toComment(CommentDto commentDto);
 
     List<Comment> toComments(List<CommentDto> commentDto);
-
 }

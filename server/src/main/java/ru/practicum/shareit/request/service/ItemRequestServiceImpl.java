@@ -3,9 +3,6 @@ package ru.practicum.shareit.request.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.booking.dto.BookingDto;
-import ru.practicum.shareit.booking.model.Booking;
-import ru.practicum.shareit.exception.ObjectNotFoundException;
 import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.item.service.ItemService;
@@ -69,15 +66,4 @@ public class ItemRequestServiceImpl implements ItemRequestService {
         return itemRequestDto;
 
     }
-
-//    @Override
-//    public BookingDto getBooking(int bookingId, int bookerId) {
-//        Booking booking = bookingRepository.findById(bookingId).orElseThrow(() -> new ObjectNotFoundException("booking не найден"));
-//
-//        if (booking.getItem().getOwner().getId() != bookerId || booking.getBooker().getId() != bookerId) {
-//            return bookingMapper.toBookingDto(booking);
-//        }
-//        return null;
-//    }
-
 }
