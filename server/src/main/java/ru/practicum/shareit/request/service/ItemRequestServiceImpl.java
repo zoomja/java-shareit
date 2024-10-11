@@ -3,10 +3,7 @@ package ru.practicum.shareit.request.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.repository.ItemRepository;
-import ru.practicum.shareit.item.service.ItemService;
-import ru.practicum.shareit.item.service.ItemServiceImpl;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.mapper.ItemRequestMapper;
 import ru.practicum.shareit.request.model.ItemRequest;
@@ -24,13 +21,10 @@ import java.util.stream.Collectors;
 public class ItemRequestServiceImpl implements ItemRequestService {
 
     private final ItemRequestRepository requestRepository;
-    private final ItemMapper itemMapper;
     private final UserService userService;
     private final ItemRequestMapper itemRequestMapper;
     private final UserRepository userRepository;
     private final ItemRepository itemRepository;
-    private final ItemService itemService;
-    private final ItemServiceImpl itemServiceImpl;
 
     @Override
     public ItemRequestDto addRequest(int userId, ItemRequestDto requestDto) {
@@ -64,6 +58,5 @@ public class ItemRequestServiceImpl implements ItemRequestService {
         itemRequestDto.setItems(itemRepository.findAllByRequestId(requestId));
 
         return itemRequestDto;
-
     }
 }
