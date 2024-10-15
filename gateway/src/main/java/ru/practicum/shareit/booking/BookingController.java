@@ -36,7 +36,7 @@ public class BookingController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> bookItem(@RequestHeader(HEADER_PREFIX) long userId,
+    public ResponseEntity<Object> bookItem(@Valid @RequestHeader(HEADER_PREFIX) long userId,
                                            @RequestBody @Valid BookItemRequestDto requestDto) {
         log.info("Creating booking {}, userId={}", requestDto, userId);
         return bookingClient.bookItem(userId, requestDto);
